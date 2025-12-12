@@ -1,0 +1,20 @@
+schema_version = "1.0.0"
+
+# Required
+id = "shapingrecorder"
+version = "0.3.2"
+name = "Shaping Recorder"
+tagline = "Record mesh shaping and viewport moves, replay interpolated"
+maintainer = "Darkstarrd"
+type = "add-on"
+blender_version_min = "4.2.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+
+website = "https://github.com/Darkstarrd-dev/shape_recorder"
+tags = ["Modeling"]
+
+[permissions]
+files = "Read and write image sequences"
