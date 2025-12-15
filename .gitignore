@@ -1,0 +1,18 @@
+# Blender / Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Blender temp / backups
+*.blend1
+*.blend2
+*.blend@
+*.tmp
+
+# Export outputs
+mesh_recorder_frames/
+mesh_recorder_debug/
+frame/
+*.mp4
+*.avi

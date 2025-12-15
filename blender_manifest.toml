@@ -1,0 +1,20 @@
+schema_version = "1.0.0"
+
+# Required
+id = "shapingrecorder"
+version = "0.6.8"
+name = "Shaping Recorder"
+tagline = "Record and Replay mesh edit/sculpt process"
+maintainer = "Darkstarrd"
+type = "add-on"
+blender_version_min = "4.2.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+
+website = "https://github.com/Darkstarrd-dev/shaping_recorder"
+tags = ["Animation"]
+
+[permissions]
+files = "Read and write video/image sequences"
