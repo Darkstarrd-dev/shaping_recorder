@@ -1,5 +1,7 @@
 # Shaping Recorder (Blender Add-on)
 
+[English](#english) | [中文（简体）](#中文简体) | [中文（繁體）](#中文繁體) | [日本語](#日本語) | [Español](#español) | [Deutsch](#deutsch) | [Français](#français) | [Italiano](#italiano) | [한국어](#한국어) | [Polski](#polski) | [Português](#português) | [Русский](#русский) | [Українська](#українська)
+
 ## English
 
 Shaping Recorder records mesh shaping/editing steps (including topology changes) and the active 3D viewport view, then replays them with interpolation. During playback you can optionally export a frame sequence.
