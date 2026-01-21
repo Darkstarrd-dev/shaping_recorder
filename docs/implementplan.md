@@ -131,8 +131,15 @@ ShapingRecorder/
 │   ├── data.py
 │   ├── mesh_ops.py
 │   └── interpolation.py   # 可选：后续拆分
-└── legacy/
-    └── recorder.py
+├── legacy/
+│   └── recorder.py
+└── docs/
+    ├── AGENTS.md
+    ├── CODE_OF_CONDUCT.md
+    ├── CONTRIBUTING.md
+    ├── Project.MD
+    ├── implementplan.md
+    └── instruct.md
 ```
 
 ## 实施步骤 (Step Plan)

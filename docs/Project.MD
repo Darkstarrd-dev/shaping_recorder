@@ -30,8 +30,15 @@ ShapingRecorder/
 │   ├── __init__.py
 │   ├── data.py              # 序列化/反序列化
 │   └── mesh_ops.py          # 网格操作和插值
-└── legacy/
-    └── recorder.py          # 旧单体归档
+├── legacy/
+│   └── recorder.py          # 旧单体归档
+└── docs/
+    ├── AGENTS.md
+    ├── CODE_OF_CONDUCT.md
+    ├── CONTRIBUTING.md
+    ├── Project.MD
+    ├── implementplan.md
+    └── instruct.md
 ```
 
 ### 阶段二：UI布局重构 (已完成)
@@ -205,8 +212,13 @@ ShapingRecorder/
 ├── legacy/
 │   └── recorder.py          # 旧单体归档
 ├── blender_manifest.toml
-├── AGENTS.md
-└── Project.MD               # 本文件
+└── docs/
+    ├── AGENTS.md
+    ├── CODE_OF_CONDUCT.md
+    ├── CONTRIBUTING.md
+    ├── Project.MD            # 本文件
+    ├── implementplan.md
+    └── instruct.md
 ```
 
 ## 代码架构 (v3.1 重构后)

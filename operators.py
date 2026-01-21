@@ -2,6 +2,8 @@ import bpy
 import bmesh
 import json
 
+from bpy.app.translations import pgettext_iface as iface_
+
 from . import graphics
 from . import state
 from . import view_utils
@@ -22,6 +24,21 @@ from .recording import (
     stop_recording,
     unlock_other_objects,
 )
+
+
+def _require_active_step(operator, context):
+    settings = state.get_settings(context)
+    if not settings.step_items:
+        operator.report({"INFO"}, iface_("Select a step from the list"))
+        return False
+    if settings.active_step_index < 0 or settings.active_step_index >= len(settings.step_items):
+        operator.report({"INFO"}, iface_("Select a step from the list"))
+        return False
+    item = settings.step_items[settings.active_step_index]
+    if item.index < 0:
+        operator.report({"INFO"}, iface_("Select a step from the list"))
+        return False
+    return True
 
 
 class StartRecordingOperator(bpy.types.Operator):
@@ -154,6 +171,8 @@ class PlayUnifiedOperator(bpy.types.Operator):
         return not state.is_recording and not state.is_playing and bool(state.get_current_history())
     def execute(self, context):
         settings = state.get_settings(context)
+        if settings.playback_mode == "ACTIVE" and not _require_active_step(self, context):
+            return {"CANCELLED"}
         mode = {"START": "start", "ACTIVE": "active", "RANGE": "range"}.get(settings.playback_mode, "range")
         play_forward(context, export_frames=False, mode=mode)
         return {"FINISHED"}
@@ -167,6 +186,8 @@ class RecordUnifiedOperator(bpy.types.Operator):
         return not state.is_recording and not state.is_playing and bool(state.get_current_history())
     def execute(self, context):
         settings = state.get_settings(context)
+        if settings.playback_mode == "ACTIVE" and not _require_active_step(self, context):
+            return {"CANCELLED"}
         mode = {"START": "start", "ACTIVE": "active", "RANGE": "range"}.get(settings.playback_mode, "range")
         play_forward(context, export_frames=True, mode=mode)
         return {"FINISHED"}
@@ -284,6 +305,8 @@ class PlayFromActiveOperator(bpy.types.Operator):
     @classmethod
     def poll(cls, context): return PlayUnifiedOperator.poll(context)
     def execute(self, context):
+        if not _require_active_step(self, context):
+            return {"CANCELLED"}
         play_forward(context, export_frames=False, mode="active")
         return {"FINISHED"}
 
@@ -314,6 +337,8 @@ class RecordFromActiveOperator(bpy.types.Operator):
     @classmethod
     def poll(cls, context): return RecordUnifiedOperator.poll(context)
     def execute(self, context):
+        if not _require_active_step(self, context):
+            return {"CANCELLED"}
         play_forward(context, export_frames=True, mode="active")
         return {"FINISHED"}
 
