@@ -1,7 +1,7 @@
 import bpy
 
-from . import persistence
-from . import state
+from ..data import persistence
+from ..data import state
 
 
 @bpy.app.handlers.persistent

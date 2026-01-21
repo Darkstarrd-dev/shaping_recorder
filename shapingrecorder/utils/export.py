@@ -1,6 +1,6 @@
 import bpy
 import os
-from . import state
+from ..data import state
 
 def maybe_render_viewport_frame(context):
     if not state.is_exporting_frames:

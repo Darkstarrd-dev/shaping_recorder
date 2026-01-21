@@ -1,9 +1,9 @@
 import bpy
 
-from . import persistence
-from . import state
-from . import view_utils
-from .core.mesh_ops import get_mesh_hash, save_mesh_state
+from ..data import persistence
+from ..data import state
+from ..utils import view as view_utils
+from ..core.mesh_ops import get_mesh_hash, save_mesh_state
 from .playback import apply_state_to_object
 
 

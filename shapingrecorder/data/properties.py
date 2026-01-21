@@ -4,8 +4,8 @@ from . import state
 
 def on_step_select(self, context):
     
-    from . import graphics
-    from . import operators
+    from ..utils import graphics
+    from ..operators import playback as operators
 
     if state.is_playing or state.is_recording or state._is_auto_selecting:
         return

@@ -1,5 +1,5 @@
 import bpy
-from . import state
+from ..data import state
 
 def save_view_state(context):
     screen = context.screen or bpy.context.screen

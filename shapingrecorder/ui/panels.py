@@ -1,6 +1,6 @@
 import bpy
 from bpy.app.translations import pgettext_iface as iface_
-from . import state
+from ..data import state
 
 class MESH_UL_recorder_steps(bpy.types.UIList):
     bl_idname = "MESH_UL_recorder_steps"

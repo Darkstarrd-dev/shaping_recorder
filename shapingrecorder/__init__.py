@@ -20,13 +20,15 @@ import traceback
 
 
 try:
-    from . import translations
-    from . import state
-    from . import properties
-    from . import ui
-    from . import operators
-    from . import handlers
-    from . import graphics
+    from .ui import translations
+    from .data import state
+    from .data import properties
+    from .ui import panels as ui
+    from .operators import generic as operators
+    from .operators import recording
+    from .operators import playback
+    from .utils import handlers
+    from .utils import graphics
 except ImportError as e:
     print(f"\n[ShapingRecorder] IMPORT ERROR: {e}")
     print(traceback.format_exc())
@@ -37,7 +39,7 @@ classes = (
     properties.MeshRecorderStepItem,
     ui.MESH_UL_recorder_steps,
     properties.MeshRecorderSettings,
-    operators.MeshRecorderModal,
+    recording.MeshRecorderModal,
     ui.MeshRecorderPanel,
     operators.StartRecordingOperator,
     operators.StopRecordingOperator,
@@ -74,10 +76,10 @@ def register():
         type=properties.MeshRecorderSettings
     )
 
-    if operators.load_post_handler not in bpy.app.handlers.load_post:
-        bpy.app.handlers.load_post.append(operators.load_post_handler)
-    if operators.depsgraph_update_handler not in bpy.app.handlers.depsgraph_update_post:
-        bpy.app.handlers.depsgraph_update_post.append(operators.depsgraph_update_handler)
+    if handlers.load_post_handler not in bpy.app.handlers.load_post:
+        bpy.app.handlers.load_post.append(handlers.load_post_handler)
+    if handlers.depsgraph_update_handler not in bpy.app.handlers.depsgraph_update_post:
+        bpy.app.handlers.depsgraph_update_post.append(handlers.depsgraph_update_handler)
 
     
     state._edge_draw_handler = bpy.types.SpaceView3D.draw_handler_add(
@@ -85,16 +87,16 @@ def register():
 
 def unregister():
     operators.stop_playing()
-    operators.unlock_other_objects()
+    recording.unlock_other_objects()
 
     if state._edge_draw_handler:
         bpy.types.SpaceView3D.draw_handler_remove(state._edge_draw_handler, 'WINDOW')
         state._edge_draw_handler = None
 
-    if operators.depsgraph_update_handler in bpy.app.handlers.depsgraph_update_post:
-        bpy.app.handlers.depsgraph_update_post.remove(operators.depsgraph_update_handler)
-    if operators.load_post_handler in bpy.app.handlers.load_post:
-        bpy.app.handlers.load_post.remove(operators.load_post_handler)
+    if handlers.depsgraph_update_handler in bpy.app.handlers.depsgraph_update_post:
+        bpy.app.handlers.depsgraph_update_post.remove(handlers.depsgraph_update_handler)
+    if handlers.load_post_handler in bpy.app.handlers.load_post:
+        bpy.app.handlers.load_post.remove(handlers.load_post_handler)
 
     if hasattr(bpy.types.Scene, "mesh_recorder_settings"):
         del bpy.types.Scene.mesh_recorder_settings

@@ -5,7 +5,7 @@ Blender 4.2+ 扩展，用于录制网格形变步骤和视口视图变化，支�
 
 ---
 
-## 当前开发进度 (v3.1 - 模块拆分与国际化完善) - 阶段三进行中
+## 当前开发进度 (v3.2 - 目录结构优化) - 阶段三进行中
 
 ### 阶段一：模块重构 (已完成)
 **目标**：将单文件架构重构为模块化结构，提高代码可维护性
@@ -13,33 +13,7 @@ Blender 4.2+ 扩展，用于录制网格形变步骤和视口视图变化，支�
 **已完成**：
 - ✅ 拆分 `handlers.py` / `persistence.py` / `recording.py` / `playback.py`
 - ✅ `operators.py` 仅保留 Operator 类与薄封装
-- ✅ 旧单体 `recorder.py` 迁移到 `legacy/recorder.py`
 - ✅ 现有 UI/Operator/函数接口保持不变
-
-**文件结构变化**：
-```
-ShapingRecorder/
-├── __init__.py              # 入口文件
-├── operators.py             # Operator 薄封装
-├── recording.py             # 录制流程
-├── playback.py              # 回放/跳转
-├── persistence.py           # 持久化
-├── handlers.py              # Handlers
-├── translations.py          # 国际化翻译数据
-├── core/
-│   ├── __init__.py
-│   ├── data.py              # 序列化/反序列化
-│   └── mesh_ops.py          # 网格操作和插值
-├── legacy/
-│   └── recorder.py          # 旧单体归档
-└── docs/
-    ├── AGENTS.md
-    ├── CODE_OF_CONDUCT.md
-    ├── CONTRIBUTING.md
-    ├── Project.MD
-    ├── implementplan.md
-    └── instruct.md
-```
 
 ### 阶段二：UI布局重构 (已完成)
 **目标**：优化用户界面，提升可用性
@@ -70,7 +44,16 @@ ShapingRecorder/
 
 **实验区域**：优先完善简体中文翻译作为测试基准
 
-### 阶段四：录制 (recording) / 回放 (playback) 模块改善 (待启动)
+### 阶段四：目录结构优化 (v3.2 - 已完成)
+**目标**：优化项目结构，按功能模块分类文件，提升项目可读性和维护性。
+
+**已完成**：
+- ✅ 创建 `ui/`, `operators/`, `data/`, `utils/` 目录
+- ✅ 将文件归类到对应目录
+- ✅ 修正所有模块引用路径
+- ✅ 移除 `legacy/` 目录和旧代码
+
+### 阶段五：录制 (recording) / 回放 (playback) 模块改善 (待启动)
 **目标**：提升录制与回放稳定性、交互提示与可维护性
 
 **当前状态**：
@@ -80,7 +63,7 @@ ShapingRecorder/
 - 🔄 待处理：点/边倒角插值方向不正确
 - 🔄 待处理：Loop Cut 记录分段（确认切数一次、滑动后一次）
 
-### 阶段五：翻译系统优化 (计划中)
+### 阶段六：翻译系统优化 (计划中)
 **目标**：解决剩余英文显示问题
 
 **待解决**：
@@ -194,24 +177,32 @@ ShapingRecorder/
 
 ---
 
-## 关键文件结构 (v3.1 重构后)
+## 关键文件结构 (v3.2 重构后)
 
 ```
 ShapingRecorder/
 ├── __init__.py              # 入口注册
-├── operators.py             # Operator 薄封装
-├── recording.py             # 录制流程
-├── playback.py              # 回放/跳转
-├── persistence.py           # 持久化
-├── handlers.py              # Handlers
-├── translations.py          # 国际化翻译数据 (75+ 翻译项)
-├── core/
+├── blender_manifest.toml    # 插件元数据
+├── core/                    # 核心算法
 │   ├── __init__.py
-│   ├── data.py              # 数据序列化/反序列化函数
-│   └── mesh_ops.py          # 网格操作和插值函数
-├── legacy/
-│   └── recorder.py          # 旧单体归档
-├── blender_manifest.toml
+│   ├── data.py              # 数据序列化
+│   └── mesh_ops.py          # 网格哈希与插值
+├── data/                    # 数据与状态
+│   ├── persistence.py       # 持久化
+│   ├── properties.py        # 属性定义
+│   └── state.py             # 全局状态
+├── operators/               # 操作符
+│   ├── generic.py           # 通用操作符
+│   ├── playback.py          # 回放逻辑
+│   └── recording.py         # 录制逻辑
+├── ui/                      # 界面
+│   ├── panels.py            # 面板绘制
+│   └── translations.py      # 国际化
+├── utils/                   # 工具库
+│   ├── export.py            # 导出工具
+│   ├── graphics.py          # 图形绘制
+│   ├── handlers.py          # 事件处理
+│   └── view.py              # 视图操作
 └── docs/
     ├── AGENTS.md
     ├── CODE_OF_CONDUCT.md
@@ -221,16 +212,15 @@ ShapingRecorder/
     └── instruct.md
 ```
 
-## 代码架构 (v3.1 重构后)
+## 代码架构 (v3.2 重构后)
 
-### 模块拆分
-- `__init__.py`：注册入口，绑定 translations/handlers/GPU draw handler
-- `operators.py`：Operator 类与薄封装
-- `recording.py`：录制流程与 modal 计时器
-- `playback.py`：回放/跳转/插值与 overlay 控制
-- `persistence.py`：场景持久化与步序同步
-- `handlers.py`：load_post/depsgraph handlers
-- `legacy/recorder.py`：旧单体归档
+### 模块职责
+- **`__init__.py`**：注册入口，绑定各子模块。
+- **`core/`**：包含不依赖 Blender 上下文的核心逻辑，如数据结构序列化和纯几何计算。
+- **`data/`**：管理插件的全局状态 (`state.py`)、Blender 属性定义 (`properties.py`) 和数据持久化 (`persistence.py`)。
+- **`operators/`**：实现 Blender 操作符逻辑，将业务逻辑从 UI 中分离。`generic.py` 包含通用操作，`recording.py` 和 `playback.py` 分别处理录制和回放流程。
+- **`ui/`**：负责界面绘制 (`panels.py`) 和多语言翻译 (`translations.py`)。
+- **`utils/`**：提供各种辅助功能，如导出、图形绘制、事件处理和视图操作。
 
 ### 核心模块 (core/)
 #### data.py - 数据序列化
@@ -242,68 +232,24 @@ ShapingRecorder/
 - `get_mesh_hash()` - 计算网格哈希
 - `save_mesh_state()` - 保存网格状态
 - `update_mesh_vertices()` - 更新顶点位置
-- `build_vertex_mapping()` - 构建顶点映射
 - `compute_step_cache()` - 计算插值缓存
 - `interpolate_states_cached()` - 缓存插值
 
-### 翻译系统 (translations.py)
+### 翻译系统 (ui/translations.py)
 - **翻译项**：75+ 个完整条目
 - **支持语言**：13种
 - **功能**：静态文本、动态文本、枚举描述
 
-### 全局状态变量
+### 全局状态变量 (data/state.py)
 - `object_records` - 多对象记录字典
 - `current_display_obj` - 当前显示对象名称
 - `playback_mode` - 播放模式 (START/ACTIVE/RANGE)
 - `show_edge_settings` - 边显示设置折叠状态
 - UI 控制变量 (_edge_draw_handler, _current_edge_coords 等)
 
-### UI 组件
-- `MeshRecorderPanel` - 主面板 (重构后UI)
+### UI 组件 (ui/panels.py)
+- `MeshRecorderPanel` - 主面板
 - `MESH_UL_recorder_steps` - 步骤列表
-- `MeshRecorderSettings` - 设置属性组
-- 统一操作符：`RecordUnifiedOperator`, `PlayUnifiedOperator`
-
-### v2.2 新增全局变量 (~560)
-- `_edge_draw_handler` - GPU 绘制 handler
-- `_current_edge_coords` - 当前绘制的边坐标列表
-- `_is_marking_edge` - 是否处于边标记模式
-- `_marking_step_index` - 当前标记的步骤索引
-
-### v2.2 当前代码状态（第二次尝试后）
-
-**已删除的函数**：
-- `get_changed_edges_obj_name()` - 已删除
-- `compute_changed_edges()` - 已删除
-- `get_or_create_changed_edges_object()` - 已删除
-- `hide_all_changed_edge_objects()` - 已删除
-
-**新增的函数**：
-- `update_mesh_new_edge_attribute(obj, edge_indices)` - 在主网格上更新 `new_edge` 属性
-
-**修改的函数**：
-- `update_edge_draw_coords()` - 从主网格实时获取边坐标
-- `on_step_select()` - 切换步骤时更新主网格属性
-- `ToggleChangedEdgesOperator.execute()` - 切换时更新/清除属性
-- `ConfirmEdgeOperator.execute()` - 存储顶点索引对
-- `save_to_scene()` - 持久化 `marked_edges` 和 `show_edges`
-- `load_from_scene()` - 加载 `marked_edges` 和 `show_edges`
-
-### v2.2 新增属性
-```python
-# MeshRecorderStepItem
-show_changed_edges: BoolProperty(default=False)
-marked_edge_indices: StringProperty(default="")  # JSON: "[[0,1],[2,3]]"
-
-# MeshRecorderSettings
-edge_color: FloatVectorProperty(subtype='COLOR_GAMMA', size=4, default=(1,1,0,1))
-edge_width: FloatProperty(default=2.0, min=1.0, max=10.0)
-edge_glow: FloatProperty(default=0.0, min=0.0, max=5.0)
-```
-
-### v2.2 新增操作符
-- `MarkEdgeOperator` (`mesh.mark_new_edge`) - 进入编辑模式标记边
-- `ConfirmEdgeOperator` (`mesh.confirm_new_edge`) - 确认标记并退出
 
 ---
 
@@ -348,7 +294,7 @@ object_records = {
 
 ## 测试路径
 - 源码：`Z:\Playground\CurrentWorking\ShapingRecorder`
-- 安装位置：`C:\Users\Houpy\AppData\Roaming\Blender Foundation\Blender\5.1\scripts\addons\ShapingRecorder`
+- 安装位置：`C:\Users\Houpy\AppData\Roaming\Blender Foundation\Blender\5.1\extensions\user_default\shapingrecorder`
 
 ## 更新插件方式
 - 复制源码到 add-on 目录后，在 Blender 中禁用/启用插件完成 reload
@@ -357,7 +303,7 @@ object_records = {
 
 ## 下一轮开发计划
 
-### 阶段四：录制 (recording) / 回放 (playback) 模块改善
+### 阶段五：录制 (recording) / 回放 (playback) 模块改善
 **目标**：提升录制与回放稳定性、交互提示与可维护性
 
 **当前状态**：
@@ -368,7 +314,7 @@ object_records = {
 - 🔄 待处理：Loop Cut 记录分段（确认切数一次、滑动后一次）
 
 
-### 阶段五：翻译系统深度优化
+### 阶段六：翻译系统深度优化
 **目标**：解决所有剩余英文显示问题，实现完整本地化
 
 **当前状态**：
@@ -459,22 +405,3 @@ object_records = {
 - `jj log` - 查看日志
 - `jj describe -m "message"` - 添加描述
 - `jj new` - 创建新变更
-
-### 翻译争议总结
-**核心问题**：Blender 扩展的翻译系统复杂，涉及多个上下文和调用方式的选择。
-
-**已解决争议**：
-- 属性 name/description：使用纯字符串 + `("*", key)` 翻译
-- 操作符 bl_label/bl_description：使用 `iface_()` + `("*", key)` 翻译
-- 枚举项：name 使用 `iface_()`，description 使用纯字符串
-
-**待验证争议**：
-- 属性 description 的 tooltip 是否正确显示中文
-- 操作符 tooltip 是否消除 "undocumented"
-- 是否还有其他未发现的英文文本
-
-**下一轮尝试策略**：
-1. 重启 Blender 进行全面测试
-2. 检查所有属性和操作符的 tooltip
-3. 如果仍有问题，考虑切换到 `iface_()` 方案
-4. 记录所有发现的未翻译项并补充

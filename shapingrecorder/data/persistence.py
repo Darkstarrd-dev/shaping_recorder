@@ -3,7 +3,7 @@ import json
 import bpy
 
 from . import state
-from .core.data import deserialize_state, serialize_state
+from ..core.data import deserialize_state, serialize_state
 
 
 def sync_step_list(context, keep_index=None):

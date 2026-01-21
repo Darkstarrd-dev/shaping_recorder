@@ -4,11 +4,11 @@ import json
 
 from bpy.app.translations import pgettext_iface as iface_
 
-from . import graphics
-from . import state
-from . import view_utils
-from .handlers import depsgraph_update_handler, load_post_handler
-from .persistence import load_from_scene, save_to_scene, sync_step_list
+from ..utils import graphics
+from ..data import state
+from ..utils import view as view_utils
+from ..utils.handlers import depsgraph_update_handler, load_post_handler
+from ..data.persistence import load_from_scene, save_to_scene, sync_step_list
 from .playback import (
     jump_step,
     jump_to_state_immediate,

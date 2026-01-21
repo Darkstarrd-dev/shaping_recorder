@@ -2,7 +2,7 @@ import bpy
 import json
 import gpu
 from gpu_extras.batch import batch_for_shader
-from . import state
+from ..data import state
 
 def update_mesh_new_edge_attribute(obj, edge_indices):
     """Update new_edge attribute on main mesh."""

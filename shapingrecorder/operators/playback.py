@@ -3,11 +3,11 @@ import os
 import bmesh
 import bpy
 
-from . import export_utils
-from . import graphics
-from . import state
-from . import view_utils
-from .core.mesh_ops import compute_step_cache, interpolate_states_cached, update_mesh_vertices
+from ..utils import export as export_utils
+from ..utils import graphics
+from ..data import state
+from ..utils import view as view_utils
+from ..core.mesh_ops import compute_step_cache, interpolate_states_cached, update_mesh_vertices
 
 
 def ensure_object_mode(context, obj):
